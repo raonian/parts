@@ -1,0 +1,45 @@
+/* 加载中 */
+var Loading = function(){
+	var loading = false;
+	var html = document.createElement("div");
+	var loadtime = null;
+	
+	var init = function(){
+		html.className = "divcover";
+		html.style.backgroundColor="rgba(0,0,0,0.5)";
+		document.body.appendChild(html);
+		html.innerHTML = '<div class="loading"><canvas id="J_load" width="100" height="100"></canvas></div>';
+			
+	}();
+	
+	var load = function(){
+		var can = document.getElementById("J_load");
+		var ctx = can.getContext("2d");
+		var rs = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5];
+		var cur = 0;
+		ctx.fillStyle = "#ffffff";
+		loadtime = setInterval(function(){
+			ctx.clearRect(0,0,100,100);
+			ctx.beginPath();
+			for(var i=0;i<10;i++){
+				ctx.arc(50+30*Math.sin(i/Math.PI*2),50+30*Math.cos(i/Math.PI*2),rs[(cur%10 + i)%10],0,Math.PI*2,false);
+				ctx.closePath();
+			}
+			ctx.fill();
+			cur++;
+		},100);
+	}
+	
+	var show = function(){
+		if(loading) return;
+		html.classList.add("show");
+		load();
+	}
+	
+	var close = function(){
+		html.classList.remove("show");
+		clearInterval(loadtime);
+	}
+	
+	return {show:show,close:close};
+}();
